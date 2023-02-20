@@ -15,6 +15,13 @@
 
 <h2>{% trans %}Statement{% endtrans %}</h2>
 
+<ul class="nav nav-tabs">
+  <li class="active">
+    <a href="./description">Statement</a>
+  </li>
+  <li><a href="./submissions">Submissions</a></li>
+</ul> 
+ 
 {% if task.statements|length == 0 %}
 <div class="row statement no_statements">
     <div class="span9">
