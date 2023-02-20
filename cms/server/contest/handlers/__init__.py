@@ -33,7 +33,8 @@ from .main import \
     StartHandler, \
     NotificationsHandler, \
     PrintingHandler, \
-    DocumentationHandler
+    DocumentationHandler, \
+    TasksHandler
 from .task import \
     TaskDescriptionHandler, \
     TaskStatementViewHandler, \
@@ -67,7 +68,7 @@ HANDLERS = [
     (r"/documentation", DocumentationHandler),
 
     # Tasks
-
+    (r"/tasks", TasksHandler),
     (r"/tasks/(.*)/description", TaskDescriptionHandler),
     (r"/tasks/(.*)/statements/(.*)", TaskStatementViewHandler),
     (r"/tasks/(.*)/attachments/(.*)", TaskAttachmentViewHandler),
