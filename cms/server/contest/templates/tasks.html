@@ -1,0 +1,79 @@
+{% extends "contest.html" %}
+
+{% set page = "tasks" %}
+
+{% block core %}
+
+
+<div class="span9">
+
+<div class="page-header">
+    <h1>Tasks</h1>
+</div>
+
+{% if actual_phase == 0 or actual_phase == 3%}
+<h2>{% trans %}Task overview{% endtrans %}</h2>
+
+<table class="table table-bordered table-striped">
+    <!-- <colgroup>
+        <col class="task"/>
+        <col class="time_limit"/>
+        <col class="memory_limit"/>
+        <col class="n_inputs"/>
+        <col class="task_type"/>
+        <col class="files"/>
+    </colgroup> -->
+    <thead>
+        <tr>
+            <th>{% trans %}Task{% endtrans %}</th>
+            <th>{% trans %}Name{% endtrans %}</th>
+            <th>{% trans %}Time limit{% endtrans %}</th>
+            <th>{% trans %}Memory limit{% endtrans %}</th>
+            <th>{% trans %}Type{% endtrans %}</th>
+            <th>{% trans %}Files{% endtrans %}</th>
+{% if tokens_contest != TOKEN_MODE_DISABLED and tokens_tasks != TOKEN_MODE_DISABLED %}
+            <th>{% trans %}Tokens{% endtrans %}</th>
+{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+{% set extensions = "[%s]"|format(contest.languages|map("to_language")|map(attribute="source_extension")|unique|join("|")) %}
+{% for t_iter in contest.tasks %}
+        <tr>
+            <th>{{ t_iter.name }}</th>
+            <td>{{ t_iter.title }}</td>
+            <td>
+    {% if t_iter.active_dataset.time_limit is not none %}
+        {{ t_iter.active_dataset.time_limit|format_duration(length="long") }}
+    {% else %}
+        {% trans %}N/A{% endtrans %}
+    {% endif %}
+            </td>
+            <td>
+    {% if t_iter.active_dataset.memory_limit is not none %}
+        {{ t_iter.active_dataset.memory_limit|format_size }}
+    {% else %}
+        {% trans %}N/A{% endtrans %}
+    {% endif %}
+            </td>
+            <td>{{ get_task_type(dataset=t_iter.active_dataset).name }}</td>
+            <td>{{ t_iter.submission_format|map("replace", ".%l", extensions)|join(" ") }}</td>
+    {% if tokens_contest != TOKEN_MODE_DISABLED and tokens_tasks != TOKEN_MODE_DISABLED %}
+            <td>
+        {% if t_iter.token_mode == TOKEN_MODE_FINITE or t_iter.token_mode == TOKEN_MODE_INFINITE %}
+            {% trans %}Yes{% endtrans %}
+        {% else %}
+            {% trans %}No{% endtrans %}
+        {% endif %}
+            </td>
+          <td><a href="/tasks/{{t_iter.name}}/description" class="btn btn-primary">View</a></td>
+    {% endif %}
+        </tr>
+{% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+  
+</div>
+{% endblock core %}
