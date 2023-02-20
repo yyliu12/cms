@@ -101,7 +101,7 @@ class FileServerMiddleware:
         response.mimetype = mimetype
         if filename is not None:
             response.headers.add(
-                "Content-Disposition", "attachment", filename=filename)
+                "Content-Disposition", "inline", filename=filename)
         response.set_etag(digest)
         response.cache_control.no_cache = True
         response.cache_control.private = True
