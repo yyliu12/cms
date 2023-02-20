@@ -69,6 +69,15 @@ class MainHandler(ContestHandler):
     def get(self):
         self.render("overview.html", **self.r_params)
 
+        
+class TasksHandler(ContestHandler):
+    """Home page handler.
+
+    """
+    @multi_contest
+    def get(self):
+        self.render("tasks.html", **self.r_params)
+
 
 class RegistrationHandler(ContestHandler):
     """Registration handler.
