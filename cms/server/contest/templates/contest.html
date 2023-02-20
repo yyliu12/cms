@@ -178,6 +178,11 @@ $(document).ready(function () {
                                 </a>
                             </li>
     {% if actual_phase == 0 or actual_phase == 3 or participation.unrestricted %}
+                            <li{% if page == "tasks" %} class="active"{% endif %}>
+                                <a href="{{ contest_url("tasks") }}">Tasks</span>
+                                </a>
+                            </li>
+                          <!--
         {% for t_iter in contest.tasks %}
                             <li class="nav-header">
                                 {{ t_iter.name }}
@@ -188,7 +193,9 @@ $(document).ready(function () {
                             <li{% if page == "task_submissions" and task == t_iter %} class="active"{% endif %}>
                                 <a href="{{ contest_url("tasks", t_iter.name, "submissions") }}">{% trans %}Submissions{% endtrans %}</a>
                             </li>
+
         {% endfor %}
+-->
     {% endif %}
                             <li class="divider"></li>
                             <li{% if page == "documentation" %} class="active"{% endif %}>
