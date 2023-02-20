@@ -171,6 +171,13 @@ $(document).ready(function () {
     <h1>{% trans name=task.title, short_name=task.name %}{{ name }} ({{ short_name }}) <small>submissions</small>{% endtrans %}</h1>
 </div>
 
+<ul class="nav nav-tabs">
+  <li>
+    <a href="./description">Statement</a>
+  </li>
+  <li class="active"><a href="./submissions">Submissions</a></li>
+</ul>
+
 {% if score_type is defined %}
     {% set two_task_scores = score_type.max_public_score > 0
         and score_type.max_public_score < score_type.max_score %}
