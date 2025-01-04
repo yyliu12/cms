@@ -13,3 +13,5 @@ cache/
 lib/
 log/
 .vagrant/
+codecov/
+.dev/

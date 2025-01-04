@@ -27,7 +27,7 @@ import re
 import sys
 
 from cms import utf8_decoder
-from cmstestsuite import CONFIG
+from cmstestsuite import TestException, CONFIG
 from cmstestsuite.Tests import ALL_TESTS
 from cmstestsuite.coverage import clear_coverage, combine_coverage
 from cmstestsuite.profiling import \
@@ -223,18 +223,34 @@ def main():
 
     # Startup the test runner.
     runner = TestRunner(test_list, contest_id=args.contest, workers=4)
+    failures = []
 
-    # Submit and wait for all tests to complete.
-    runner.submit_tests()
-    failures = runner.wait_for_evaluation()
-    write_test_case_list(
-        [(test, lang) for test, lang, _ in failures],
-        FAILED_TEST_FILENAME)
+    testing_general_failure = False
 
-    # And good night!
-    runner.shutdown()
-    runner.log_elapsed_time()
+    try:
+        # Submit and wait for all tests to complete.
+        runner.submit_tests()
+        failures += runner.wait_for_evaluation()
+        write_test_case_list(
+            [(test, lang) for test, lang, _ in failures],
+            FAILED_TEST_FILENAME)
+    except TestException:
+        if os.path.exists("./log/cms/last.log"):
+            print("\n\n===== START OF LOG DUMP =====\n\n")
+            with open("./log/cms/last.log", "rt", encoding="utf-8") as f:
+                print(f.read())
+            print("\n\n===== END OF LOG DUMP =====\n\n")
+        logging.error("Failure while running tests", exc_info=True)
+        testing_general_failure = True
+    finally:
+        # And good night!
+        runner.shutdown()
+        runner.log_elapsed_time()
+
     combine_coverage()
+
+    if testing_general_failure:
+        return 1
 
     logger.info("Executed: %s", tests)
     logger.info("Failed: %s", len(failures))
